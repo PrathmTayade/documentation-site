@@ -1,0 +1,66 @@
+---
+sidebar_position: 1
+---
+
+# Geofarer TableContainer
+
+Component is mainly used for all the tables in the geofarer in admin side 
+
+### Basic use of table
+
+```jsx
+<TableContainer
+  columns={columns}
+  loading={loading}
+  total={total}
+  size={size}
+  functionsHandler={getPortList}
+  pageSizeHandler={pageSizeHandler}
+  scroll={{}}
+  breadcrumb={"Ports Management"}
+  rowKeyName="port_id"
+  data={portsList}
+  role_id={2}
+  filter="ports"
+  handleExport={exportData}
+  searchFor="Name, Code"
+  addButton={true}
+  addHandler={openModal}
+  parseButton="export"
+  rowClickHandler={(record) => setSelected(record)}
+/>
+```
+
+### Data fetching for table
+
+use data fetching function to give data to the table:
+
+```jsx
+<TableContainer functionsHandler={getPortList} />;
+
+const getPortList = async (payload) => {
+  let newpayload = {
+    ...payload,
+    role_id: role_id,
+  };
+  setLoading(true);
+  const res = await getApi(newpayload, "getPortList", "user/");
+  if (res.data) {
+    setPortsList(res.data);
+    setTotal(res.meta?.total);
+  }
+  setLoading(false);
+};
+```
+
+### Pagination:
+
+```jsx
+<TableContainer pageSizeHandler={pageSizeHandler}>
+
+  const pageSizeHandler = (page, size) => {
+    setPage(page);
+    setSize(size);
+  };
+
+```
